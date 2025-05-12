@@ -1,0 +1,32 @@
+[project]
+name = "feedback-project"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "chitharthan-stack",email = "sidhupkc@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "feedback_project", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^4.2"
+djangorestframework = "^3.14"
+celery = "^5.3"
+redis = "^5.0"
+psycopg2-binary = "^2.9"
+reportlab = "^4.0"
+flower = "^2.0"
+gunicorn = "^21.2"
+
