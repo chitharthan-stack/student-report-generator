@@ -2,6 +2,7 @@ from celery import shared_task
 from .models import HTMLReport, PDFReport
 from reportlab.pdfgen import canvas
 import io
+from django.core.files.base import ContentFile  
 
 @shared_task(bind=True)
 def generate_html_report(self, payload):
@@ -50,6 +51,7 @@ def generate_pdf_report(self, payload):
                 q_number += 1
             result.append(unit_to_q[unit])
 
+        # Generate PDF in memory
         output = io.BytesIO()
         p = canvas.Canvas(output)
         p.setFont("Helvetica", 12)
@@ -59,10 +61,13 @@ def generate_pdf_report(self, payload):
         p.save()
         output.seek(0)
 
+        # Wrap in ContentFile before saving
+        pdf_file = ContentFile(output.read(), name=f"{student_id}_report.pdf")
+
         PDFReport.objects.create(
             student_id=student_id,
             task_id=self.request.id,
-            pdf_file=output.read()
+            pdf_file=pdf_file  # ✅ This is now a proper File object
         )
 
         return self.request.id
